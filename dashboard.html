@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>LovN Wedding Planner™ Dashboard</title>
+
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+<!-- ZIP Export -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
+<style>
+:root{
+  --teal:#0aa6a6;
+  --gold:#d9b45a;
+  --dark:#0b0b0f;
+}
+
+body{
+  margin:0;
+  font-family:Inter,sans-serif;
+  color:var(--dark);
+  background:
+    url("ChatGPT Image Jan 27, 2026, 07_20_34 PM.png") center/cover fixed,
+    #fff;
+}
+
+.overlay{
+  background:rgba(255,255,255,.93);
+  min-height:100vh;
+}
+
+/* HEADER */
+header{
+  padding:48px 24px 24px;
+  text-align:center;
+}
+
+h1{
+  font-family:"Playfair Display",serif;
+  font-size:68px;
+  margin:0;
+  background:linear-gradient(135deg,var(--teal),var(--gold));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+.subtitle{
+  margin-top:10px;
+  font-size:18px;
+  opacity:.85;
+}
+
+/* NAV */
+nav{
+  display:flex;
+  gap:10px;
+  justify-content:center;
+  flex-wrap:wrap;
+  margin:26px auto;
+}
+
+nav button{
+  padding:12px 18px;
+  border-radius:999px;
+  border:1px solid rgba(0,0,0,.15);
+  background:#fff;
+  font-weight:700;
+  cursor:pointer;
+}
+
+nav button.active{
+  background:linear-gradient(135deg,var(--teal),var(--gold));
+  color:#fff;
+  border:none;
+}
+
+/* SECTIONS */
+section{
+  max-width:1200px;
+  margin:0 auto;
+  padding:24px;
+  display:none;
+}
+
+section.active{display:block}
+
+.card{
+  background:#fff;
+  border-radius:22px;
+  padding:22px;
+  box-shadow:0 20px 60px rgba(0,0,0,.12);
+  margin-bottom:24px;
+}
+
+.card h2{
+  font-family:"Playfair Display",serif;
+  margin-top:0;
+}
+
+textarea,input,select{
+  width:100%;
+  padding:12px;
+  border-radius:12px;
+  border:1px solid rgba(0,0,0,.15);
+  margin-bottom:10px;
+}
+
+.checklist li{
+  list-style:none;
+  margin:6px 0;
+}
+
+.checklist input{
+  width:auto;
+  margin-right:8px;
+}
+
+.action{
+  background:linear-gradient(135deg,var(--teal),var(--gold));
+  border:none;
+  color:#fff;
+  padding:10px 16px;
+  border-radius:14px;
+  font-weight:700;
+  cursor:pointer;
+  margin-top:8px;
+}
+
+/* BADGE */
+#statusBadge{
+  position:fixed;
+  top:16px;
+  right:16px;
+  padding:10px 16px;
+  border-radius:999px;
+  font-weight:800;
+  display:none;
+  background:linear-gradient(135deg,var(--teal),var(--gold));
+  color:#fff;
+  box-shadow:0 12px 30px rgba(0,0,0,.25);
+  z-index:999;
+}
+</style>
+</head>
+
+<body>
+<div id="statusBadge">🔐 Paid • Active</div>
+
+<div class="overlay">
+
+<header>
+  <h1>LovN Wedding Planner™</h1>
+  <div class="subtitle">Your shared wedding command center</div>
+</header>
+
+<nav>
+  <button onclick="openTab('overview')" class="active">Overview</button>
+  <button onclick="openTab('gallery')">Gallery</button>
+  <button onclick="openTab('events')">Events</button>
+  <button onclick="openTab('budget')">Budget</button>
+  <button onclick="openTab('menu')">Menu</button>
+  <button onclick="openTab('playlist')">Playlist</button>
+  <button onclick="openTab('notes')">Notes</button>
+</nav>
+
+<!-- OVERVIEW -->
+<section id="overview" class="active">
+  <div class="card">
+    <h2>Overview & Role</h2>
+    <select id="roleSelect" onchange="setRole(this.value)">
+      <option>Bride</option>
+      <option>Groom</option>
+      <option>Planner</option>
+      <option>Guest</option>
+    </select>
+
+    <button class="action" onclick="exportZIP()">📦 Download Wedding ZIP</button>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section id="gallery">
+  <div class="card">
+    <h2>Photo & Document Library</h2>
+    <input type="file" multiple>
+    <textarea placeholder="Gallery notes"></textarea>
+  </div>
+</section>
+
+<!-- EVENTS -->
+<section id="events">
+  <div class="card">
+    <h2>Events & Timeline</h2>
+    <input placeholder="Event Name">
+    <input type="date">
+    <textarea placeholder="Event notes"></textarea>
+    <button class="action"
+      onclick="sendSMS('15551234567','Wedding Event Reminder 💍')">
+      📱 Send SMS Reminder
+    </button>
+  </div>
+</section>
+
+<!-- BUDGET -->
+<section id="budget">
+  <div class="card">
+    <h2>Budget Tracker</h2>
+    <input placeholder="Category">
+    <input placeholder="Estimated Cost">
+    <input placeholder="Actual Cost">
+    <textarea placeholder="Budget notes"></textarea>
+  </div>
+</section>
+
+<!-- MENU -->
+<section id="menu">
+  <div class="card">
+    <h2>Menu Planning</h2>
+    <ul class="checklist">
+      <li><input type="checkbox"> Chicken</li>
+      <li><input type="checkbox"> Salmon</li>
+      <li><input type="checkbox"> Vegetarian</li>
+    </ul>
+    <textarea placeholder="Menu notes"></textarea>
+  </div>
+</section>
+
+<!-- PLAYLIST -->
+<section id="playlist">
+  <div class="card">
+    <h2>Music Playlist</h2>
+    <input placeholder="Song / Playlist Link">
+    <textarea placeholder="Why this song matters"></textarea>
+  </div>
+</section>
+
+<!-- NOTES -->
+<section id="notes">
+  <div class="card">
+    <h2>Global Notes & Checklist</h2>
+    <textarea placeholder="Overall wedding notes"></textarea>
+    <ul class="checklist">
+      <li><input type="checkbox"> Book venue</li>
+      <li><input type="checkbox"> Order flowers</li>
+      <li><input type="checkbox"> Send invitations</li>
+    </ul>
+  </div>
+</section>
+
+</div>
+
+<script>
+/* NAV */
+function openTab(id){
+  document.querySelectorAll("section").forEach(s=>s.classList.remove("active"));
+  document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  event.target.classList.add("active");
+}
+
+/* STRIPE STATUS */
+const params=new URLSearchParams(window.location.search);
+if(params.get("paid")==="true"){localStorage.setItem("lovn_paid","true")}
+if(localStorage.getItem("lovn_paid")==="true"){
+  document.getElementById("statusBadge").style.display="block";
+}
+
+/* ROLE SYSTEM */
+function setRole(role){
+  localStorage.setItem("lovn_role",role);
+}
+setRole(localStorage.getItem("lovn_role")||"Bride");
+
+/* SMS */
+function sendSMS(phone,msg){
+  window.location.href=`sms:${phone}?body=${encodeURIComponent(msg)}`;
+}
+
+/* ZIP EXPORT */
+async function exportZIP(){
+  const zip=new JSZip();
+  zip.file("overview.txt","LovN Wedding Planner Export\n"+new Date());
+  document.querySelectorAll("textarea").forEach((t,i)=>{
+    zip.file(`notes/note_${i+1}.txt`,t.value||"");
+  });
+  const blob=await zip.generateAsync({type:"blob"});
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download="LovN_Wedding_Planning.zip";
+  a.click();
+}
+</script>
+
+</body>
+</html>
