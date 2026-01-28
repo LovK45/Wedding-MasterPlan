@@ -1,95 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>LovN Wedding Planner™ — Dashboard</title>
-  <style>
-    :root{--teal:#0aa6a6;--gold:#d9b45a;--black:#0b0b0f;--bg:#ffffff}
-    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--black)}
-    .topbar{
-      position:sticky; top:0; z-index:50;
-      background:rgba(255,255,255,.86);
-      backdrop-filter: blur(10px);
-      border-bottom:1px solid rgba(0,0,0,.08);
-      padding:14px 18px;
-      display:flex;align-items:center;justify-content:space-between;gap:12px;
-    }
-    .brand{
-      display:flex;align-items:center;gap:12px;font-weight:900;
-    }
-    .pill{
-      padding:8px 12px;border-radius:999px;
-      background:linear-gradient(135deg, rgba(10,166,166,.12), rgba(217,180,90,.15));
-      border:1px solid rgba(0,0,0,.08);
-      font-weight:800;
-    }
-    .actions{display:flex; gap:10px; align-items:center}
-    .btn{
-      padding:10px 12px;border-radius:14px;border:1px solid rgba(0,0,0,.12);
-      background:#fff;font-weight:800;cursor:pointer;
-    }
-    .btnPrimary{
-      background:linear-gradient(135deg,var(--teal),var(--gold));
-      border:none;color:#fff;
-    }
-    .wrap{padding:18px; max-width:1200px; margin:0 auto;}
-    .note{opacity:.75;font-size:13px}
-    iframe{width:100%; height:82vh; border:none; border-radius:18px; box-shadow:0 30px 90px rgba(0,0,0,.10)}
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>LovN Wedding Planner™</title>
+
+<style>
+body{
+  margin:0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  background:#fff;
+}
+iframe{
+  width:100%;
+  height:100vh;
+  border:none;
+}
+</style>
 </head>
+
 <body>
-
-<div class="topbar">
-  <div class="brand">
-    <span class="pill">💍 LovN Wedding Planner™</span>
-    <span class="note" id="who"></span>
-  </div>
-  <div class="actions">
-    <button class="btn" id="copyInvite">Copy Invite Link</button>
-    <button class="btn btnPrimary" id="logout">Logout</button>
-  </div>
-</div>
-
-<div class="wrap">
-  <!-- ✅ Load your original inside dashboard file here -->
-  <!-- If your inside page is index.html, rename it to dashboard.html and load it below -->
-  <iframe src="dashboard.html"></iframe>
-</div>
-
 <script>
-  // ✅ Access gate
-  const params = new URLSearchParams(location.search);
-  const invitedGuest = params.get("invite")==="guest";
-
-  const loggedIn = localStorage.getItem("lovn_logged_in")==="true";
-
-  if(!loggedIn && !invitedGuest){
-    location.href = "login.html";
-  }
-
-  // set role
-  const role = invitedGuest ? "guest" : (localStorage.getItem("lovn_role") || "customer");
-  const email = localStorage.getItem("lovn_user_email") || "Guest Viewer";
-
-  document.getElementById("who").textContent = role === "guest"
-    ? "Guest access link (view + suggestions)"
-    : `Logged in: ${email}`;
-
-  document.getElementById("logout").onclick = ()=>{
-    localStorage.removeItem("lovn_logged_in");
-    localStorage.removeItem("lovn_user_email");
-    localStorage.removeItem("lovn_role");
-    location.href = "login.html";
-  };
-
-  document.getElementById("copyInvite").onclick = ()=>{
-    const url = new URL(location.href);
-    url.searchParams.set("invite","guest");
-    navigator.clipboard.writeText(url.toString());
-    alert("Invite link copied! Share it with the planner / wedding party.");
-  };
+if(localStorage.getItem("lovn_logged_in")!=="true"){
+  location.href="login.html";
+}
 </script>
 
+<iframe src="dashboard.html"></iframe>
 </body>
 </html>
